@@ -1,0 +1,31 @@
+[project]
+name = "careerlens"
+version = "0.1.0"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+  "fastapi>=0.115,<1", "uvicorn>=0.34,<1", "pydantic-settings>=2.7,<3",
+  "sqlalchemy>=2.0,<2.1", "psycopg[binary,pool]>=3.2,<4", "alembic>=1.14,<2",
+  "pgvector>=0.4,<1", "numpy>=2,<3", "redis>=6,<8", "rq>=2.5,<3",
+  "pwdlib[argon2]>=0.2,<1", "pyjwt>=2.10,<3", "pypdf>=6,<7",
+  "python-multipart>=0.0.22,<1", "langgraph>=1.0,<2", "langgraph-checkpoint-postgres>=3,<4",
+  "openai>=2,<3", "langfuse>=3,<5",
+]
+[project.optional-dependencies]
+embeddings = ["sentence-transformers>=5.7,<6", "torch>=2.12,<3"]
+judges = ["deepeval>=3.7,<5"]
+[dependency-groups]
+dev = ["pytest>=8,<10", "ruff>=0.12,<1", "httpx>=0.28,<1", "reportlab>=4,<5"]
+[tool.ruff]
+line-length = 110
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+# The default optional encoder build targets CPU inference on Linux x86-64.
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux' and platform_machine == 'x86_64'" }]

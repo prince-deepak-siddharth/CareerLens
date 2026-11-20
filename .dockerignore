@@ -1,0 +1,11 @@
+.git
+.env
+backend/.venv
+backend/.venv-neural
+backend/.pytest_cache
+**/__pycache__
+**/.ruff_cache
+frontend/node_modules
+frontend/.next
+frontend/*.tsbuildinfo
+evaluation/reports
