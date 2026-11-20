@@ -31,7 +31,7 @@ const formatDate = (value: string) => new Date(value).toLocaleDateString(undefin
 function Brand({ onClick }: { onClick?: () => void }) {
   return <button onClick={onClick} className="brand" type="button">
     <span className="brand-glyph"><Compass size={21} strokeWidth={2.1} /></span>
-    <span>Career<span className="brand-os">OS</span></span>
+    <span>Career<span className="brand-accent">Lens</span></span>
   </button>;
 }
 
