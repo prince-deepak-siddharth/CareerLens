@@ -1,0 +1,87 @@
+name: CareerLens CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: careerlens
+          POSTGRES_PASSWORD: careerlens
+          POSTGRES_DB: careerlens
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U careerlens" --health-interval 5s --health-timeout 3s --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      CAREERLENS_ENVIRONMENT: test
+      CAREERLENS_DATABASE_URL: postgresql+psycopg://careerlens:careerlens@localhost:5432/careerlens
+      CAREERLENS_EVALUATION_DATABASE_URL: postgresql+psycopg://careerlens:careerlens@localhost:5432/careerlens_evaluation
+      CAREERLENS_CODE_COMMIT: ${{ github.sha }}
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - run: uv sync --python 3.12 --locked
+      - run: uv run --locked ruff check . && uv run --locked ruff format --check .
+      - name: Migrate and seed fixtures
+        run: |
+          uv run --locked python -c "import psycopg; conn=psycopg.connect('postgresql://careerlens:careerlens@localhost/careerlens', autocommit=True); conn.execute('CREATE DATABASE careerlens_evaluation'); conn.close()"
+          uv run --locked alembic upgrade head
+          uv run --locked alembic check
+          uv run --locked python -m app.ingestion seed --count 120
+          CAREERLENS_DATABASE_URL="$CAREERLENS_EVALUATION_DATABASE_URL" uv run --locked alembic upgrade head
+          CAREERLENS_DATABASE_URL="$CAREERLENS_EVALUATION_DATABASE_URL" uv run --locked python -m app.ingestion seed --count 120
+      - run: uv run --locked pytest -q
+      - name: Run and gate deterministic agent evaluations
+        run: |
+          for dataset in agent-single-turn agent-multiturn prompt-injection; do
+            uv run --locked python -m app.evaluations.runner "$dataset" --output "../evaluation/reports/$dataset.json"
+          done
+          uv run --locked python -c "import json, pathlib; paths=list(pathlib.Path('../evaluation/reports').glob('*.json')); assert len(paths)==3; assert all(json.loads(path.read_text())['metrics']['failed_turns']==0 for path in paths)"
+      - name: Run retrieval and output benchmarks
+        run: |
+          for dataset in retrieval resume-extraction job-explanations; do
+            uv run --locked python -m app.evaluations.runner "$dataset" --output "../evaluation/reports/$dataset.json"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-results
+          path: evaluation/reports
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint && npm run typecheck && npm run build
+
+  containers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose config --quiet
+      - run: docker compose build api frontend

@@ -1,0 +1,74 @@
+name: Live model evaluation
+
+on:
+  workflow_dispatch:
+    inputs:
+      dataset:
+        type: choice
+        options: [agent-single-turn, agent-multiturn, prompt-injection, resume-extraction, job-explanations]
+        default: job-explanations
+      model:
+        type: string
+        default: gpt-4.1-mini
+      prompt_label:
+        type: string
+        default: production
+
+permissions:
+  contents: read
+
+jobs:
+  judge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    environment: live-evaluation
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: careerlens
+          POSTGRES_PASSWORD: careerlens
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U careerlens" --health-interval 5s --health-timeout 3s --health-retries 10
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      CAREERLENS_DATABASE_URL: postgresql+psycopg://careerlens:careerlens@localhost:5432/careerlens
+      CAREERLENS_EVALUATION_DATABASE_URL: postgresql+psycopg://careerlens:careerlens@localhost:5432/careerlens_evaluation
+      CAREERLENS_CODE_COMMIT: ${{ github.sha }}
+      CAREERLENS_MAX_MODEL_CALLS_PER_TURN: "1"
+      CAREERLENS_MODEL_OUTPUT_TOKENS: "600"
+      CAREERLENS_MODEL_TIMEOUT: "12"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --python 3.12 --locked --extra judges
+      - name: Prepare isolated fixture database
+        run: |
+          uv run --locked python -c "import psycopg; conn=psycopg.connect('postgresql://careerlens:careerlens@localhost/careerlens', autocommit=True); conn.execute('CREATE DATABASE careerlens_evaluation'); conn.close()"
+          uv run --locked alembic upgrade head
+          CAREERLENS_DATABASE_URL="$CAREERLENS_EVALUATION_DATABASE_URL" uv run --locked alembic upgrade head
+          CAREERLENS_DATABASE_URL="$CAREERLENS_EVALUATION_DATABASE_URL" uv run --locked python -m app.ingestion seed --count 120
+      - name: Evaluate a single synthetic dataset
+        env:
+          CAREERLENS_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CAREERLENS_TELEMETRY_ENABLED: ${{ vars.CAREERLENS_TELEMETRY_ENABLED || 'false' }}
+          LANGFUSE_BASE_URL: ${{ vars.LANGFUSE_BASE_URL || 'https://cloud.langfuse.com' }}
+          LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
+          LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+          CAREERLENS_LLM_PROVIDER: openai
+          CAREERLENS_OPENAI_MODEL: ${{ inputs.model }}
+          CAREERLENS_PROMPT_LABEL: ${{ inputs.prompt_label }}
+          CAREERLENS_LIVE_DATASET: ${{ inputs.dataset }}
+        run: |
+          test -n "$CAREERLENS_OPENAI_API_KEY"
+          if [ "$CAREERLENS_LIVE_DATASET" = "job-explanations" ]; then
+            set -- --judge-model "$CAREERLENS_OPENAI_MODEL"
+          fi
+          uv run --locked --no-sync python -m app.evaluations.runner "$CAREERLENS_LIVE_DATASET" "$@" --label "$CAREERLENS_PROMPT_LABEL" --output ../evaluation/reports/live.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: live-evaluation-result
+          path: evaluation/reports/live.json

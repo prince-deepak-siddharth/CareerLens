@@ -1,0 +1,147 @@
+name: careerlens
+
+x-api-build: &api-build
+  context: .
+  dockerfile: backend/Dockerfile
+  args:
+    UV_EXTRAS: ${CAREERLENS_UV_EXTRAS---extra embeddings}
+
+x-backend: &backend
+  image: careerlens-backend:local
+  build: *api-build
+  env_file:
+    - path: .env
+      required: false
+  environment: &backend-environment
+    CAREERLENS_DATABASE_URL: postgresql+psycopg://careerlens:${POSTGRES_PASSWORD:-careerlens}@db:5432/careerlens
+    CAREERLENS_EVALUATION_DATABASE_URL: postgresql+psycopg://careerlens:${POSTGRES_PASSWORD:-careerlens}@db:5432/careerlens_evaluation
+    CAREERLENS_REDIS_URL: redis://redis:6379/0
+    CAREERLENS_ADMINS: ${CAREERLENS_ADMINS:-[]}
+    CAREERLENS_CODE_COMMIT: ${CAREERLENS_CODE_COMMIT:-unrecorded}
+    CAREERLENS_EMBEDDING_MODEL: ${CAREERLENS_EMBEDDING_MODEL:-sentence-transformers/all-MiniLM-L6-v2}
+    CAREERLENS_AGENT_LIVE_SEARCH: ${CAREERLENS_AGENT_LIVE_SEARCH:-true}
+    CAREERLENS_GREENHOUSE_BOARDS: ${CAREERLENS_GREENHOUSE_BOARDS-figma,duolingo}
+    CAREERLENS_AGENT_MODEL_PROVIDER: ${CAREERLENS_AGENT_MODEL_PROVIDER:-llama}
+    CAREERLENS_LLAMA_URL: http://model:8080/v1
+    HF_HOME: /model-cache
+    HF_HUB_DISABLE_XET: "1"
+    OMP_NUM_THREADS: "2"
+    MKL_NUM_THREADS: "2"
+  volumes: ["embedding-models:/model-cache"]
+
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: careerlens
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-careerlens}
+      POSTGRES_DB: careerlens
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./infrastructure/docker/create-evaluation-db.sql:/docker-entrypoint-initdb.d/10-evaluation.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U careerlens -d careerlens -h 127.0.0.1"]
+      interval: 4s
+      timeout: 3s
+      retries: 15
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: ["redis:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 4s
+      timeout: 3s
+      retries: 15
+
+  migrate:
+    <<: *backend
+    depends_on:
+      db: {condition: service_healthy}
+    environment:
+      <<: *backend-environment
+      CAREERLENS_SEED_COUNT: ${CAREERLENS_SEED_COUNT:-5000}
+    command:
+      - sh
+      - -ec
+      - |
+        alembic upgrade head
+        CAREERLENS_DATABASE_URL="$$CAREERLENS_EVALUATION_DATABASE_URL" alembic upgrade head
+        if [ "$$CAREERLENS_SEED_COUNT" != 0 ]; then
+          python -m app.ingestion seed --count "$$CAREERLENS_SEED_COUNT" --include-related
+        fi
+        if [ -n "$$CAREERLENS_GREENHOUSE_BOARDS" ]; then
+          python -m app.greenhouse import --allow-unavailable "$$CAREERLENS_GREENHOUSE_BOARDS"
+        fi
+        python -m app.ingestion reindex
+        CAREERLENS_DATABASE_URL="$$CAREERLENS_EVALUATION_DATABASE_URL" python -m app.ingestion seed --count 120
+
+  model:
+    image: ghcr.io/ggml-org/llama.cpp:server@sha256:5b43086e3ba7ea5794d72904654f6cd41224a9b1c6ac0398f4940ee380d30f23
+    environment:
+      LLAMA_CACHE: /model-cache
+    command:
+      - --hf-repo
+      - Qwen/Qwen2.5-0.5B-Instruct-GGUF:Q4_K_M
+      - --alias
+      - qwen2.5-0.5b-instruct
+      - --host
+      - 0.0.0.0
+      - --ctx-size
+      - "4096"
+      - --parallel
+      - "1"
+      - --threads
+      - "2"
+    volumes: ["chat-model:/model-cache"]
+
+  api:
+    <<: *backend
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+    ports: ["127.0.0.1:${CAREERLENS_API_PORT:-8000}:8000"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready', timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 12
+
+  worker:
+    <<: *backend
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+    command: ["python", "-m", "app.queueing"]
+    volumes:
+      - imports:/imports
+      - embedding-models:/model-cache
+    healthcheck:
+      test: ["CMD", "python", "-c", "from rq import Worker; from app.queueing import redis; assert Worker.count(connection=redis()) > 0"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        CAREERLENS_API_ORIGIN: http://api:8000
+        NEXT_PUBLIC_LANGFUSE_URL: ${NEXT_PUBLIC_LANGFUSE_URL:-${LANGFUSE_BASE_URL:-https://cloud.langfuse.com}}
+    depends_on:
+      api: {condition: service_healthy}
+    ports: ["127.0.0.1:${CAREERLENS_WEB_PORT:-3000}:3000"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 8s
+      timeout: 4s
+      retries: 10
+
+volumes:
+  postgres:
+  embedding-models:
+  chat-model:
+  redis:
+  imports:
