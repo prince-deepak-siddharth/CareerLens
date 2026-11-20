@@ -1,0 +1,649 @@
+[
+  {
+    "id": "agent-single-turn-001",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote Python internships",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "remote_policy": "remote",
+          "employment_type": "internship"
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-002",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Show hybrid jobs",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "remote_policy": "hybrid"
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-003",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Search onsite roles",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "remote_policy": "onsite"
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-004",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find enterprise roles",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "company_category": "enterprise"
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-005",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find startup jobs",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "company_category": "startup"
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-006",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Show nonprofit jobs",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "company_category": "nonprofit"
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-007",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find jobs in Bengaluru",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "location": "bengaluru"
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-008",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find jobs in London",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "location": "london"
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-009",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Show full-time opportunities",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "employment_type": "full-time"
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-010",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find jobs requiring React",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "skills": [
+            "react"
+          ]
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-011",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find jobs requiring Linux",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "skills": [
+            "linux"
+          ]
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-012",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find jobs requiring Kotlin",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "skills": [
+            "kotlin"
+          ]
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-013",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find jobs requiring Kubernetes",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "skills": [
+            "kubernetes"
+          ]
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-014",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Show jobs with no experience",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "max_required_years": 0
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-015",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Show jobs with up to 2 years",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "max_required_years": 2
+        },
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-016",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find internship jobs requiring Rust",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "employment_type": "internship",
+          "skills": [
+            "rust"
+          ]
+        },
+        "has_jobs": false
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-017",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find jobs in Berlin",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "location": "berlin"
+        },
+        "has_jobs": false
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-018",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find contract jobs",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "employment_type": "contract"
+        },
+        "has_jobs": false
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-019",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find part-time jobs",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "employment_type": "part-time"
+        },
+        "has_jobs": false
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-020",
+    "initial": {
+      "years_experience": 0
+    },
+    "turns": [
+      {
+        "message": "Recommend opportunities for me",
+        "required_tools": [
+          "rank_jobs_for_user"
+        ],
+        "has_jobs": true,
+        "filters": {
+          "max_required_years": 0
+        }
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-021",
+    "initial": {},
+    "turns": [
+      {
+        "message": "What are my preferences?",
+        "required_tools": [
+          "get_user_profile"
+        ],
+        "contains": "no saved preferences"
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-022",
+    "initial": {
+      "skills": [
+        "Python"
+      ]
+    },
+    "turns": [
+      {
+        "message": "Show my profile",
+        "required_tools": [
+          "get_user_profile"
+        ],
+        "contains": "Python"
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-023",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Show my saved jobs",
+        "required_tools": [
+          "get_saved_jobs"
+        ],
+        "contains": "0 saved"
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-024",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Show recent searches",
+        "required_tools": [
+          "get_recent_searches"
+        ],
+        "contains": "No recent searches"
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-025",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find both remote and onsite jobs",
+        "required_tools": [],
+        "contains": "conflicting filters",
+        "no_tools": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-026",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find full-time internships",
+        "required_tools": [],
+        "contains": "conflicting filters",
+        "no_tools": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-027",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Remember something",
+        "required_tools": [],
+        "contains": "Which preference",
+        "no_tools": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-028",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Tell me about the third job",
+        "required_tools": [],
+        "contains": "Which job",
+        "no_tools": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-029",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Why did you recommend the first job?",
+        "required_tools": [],
+        "contains": "Which job",
+        "no_tools": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-030",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Save the first job",
+        "required_tools": [],
+        "contains": "Which job",
+        "no_tools": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-031",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Hello there",
+        "required_tools": [],
+        "contains": "What kind",
+        "no_tools": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-032",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Search for internships",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "expected_status": "error",
+        "fail_tool": "search_jobs"
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-033",
+    "initial": {},
+    "turns": [
+      {
+        "message": "A job in another user's account",
+        "required_tools": [],
+        "forbidden_jobs": true,
+        "no_tools": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-single-turn-034",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Set my preference to at most 99 years",
+        "required_tools": [
+          "update_user_preferences"
+        ],
+        "expected_status": "invalid"
+      }
+    ],
+    "forbidden_tools": [],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  }
+]

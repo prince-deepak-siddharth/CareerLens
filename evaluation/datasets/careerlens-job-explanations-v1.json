@@ -1,0 +1,48 @@
+[
+  {
+    "id": "explanation-0",
+    "external_id": "demo-00000",
+    "skills": [
+      "Python"
+    ],
+    "matched": [
+      "python"
+    ]
+  },
+  {
+    "id": "explanation-1",
+    "external_id": "demo-00001",
+    "skills": [
+      "Python",
+      "PostgreSQL"
+    ],
+    "matched": [
+      "postgresql",
+      "python"
+    ]
+  },
+  {
+    "id": "explanation-2",
+    "external_id": "demo-00002",
+    "skills": [
+      "Docker"
+    ],
+    "matched": []
+  },
+  {
+    "id": "explanation-4",
+    "external_id": "demo-00004",
+    "skills": [
+      "Kubernetes"
+    ],
+    "matched": [
+      "kubernetes"
+    ]
+  },
+  {
+    "id": "explanation-9",
+    "external_id": "demo-00009",
+    "skills": [],
+    "matched": []
+  }
+]

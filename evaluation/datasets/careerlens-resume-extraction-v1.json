@@ -1,0 +1,47 @@
+[
+  {
+    "id": "backend",
+    "text": "Education\nBSc Computer Science\nSkills\nPython, PostgreSQL\nExperience\nBackend Intern",
+    "skills": [
+      "Python",
+      "PostgreSQL"
+    ],
+    "education": [
+      "BSc Computer Science"
+    ],
+    "work_experience": [
+      "Backend Intern"
+    ]
+  },
+  {
+    "id": "data",
+    "text": "Education\nMSc Statistics\nSkills\nSQL and TensorFlow\nExperience\nData Assistant",
+    "skills": [
+      "SQL",
+      "TensorFlow"
+    ],
+    "education": [
+      "MSc Statistics"
+    ],
+    "work_experience": [
+      "Data Assistant"
+    ]
+  },
+  {
+    "id": "empty",
+    "text": "Applicant\nReferences available on request.",
+    "skills": [],
+    "education": [],
+    "work_experience": []
+  },
+  {
+    "id": "frontend",
+    "text": "Skills\nReact, TypeScript\nProjects\nAccessible navigation",
+    "skills": [
+      "React",
+      "TypeScript"
+    ],
+    "education": [],
+    "work_experience": []
+  }
+]

@@ -1,0 +1,428 @@
+[
+  {
+    "id": "agent-multiturn-001",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "Only show startups",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "remote_policy": "remote",
+          "employment_type": "internship",
+          "company_category": "startup"
+        }
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-002",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "Only show onsite roles",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "filters": {
+          "remote_policy": "onsite",
+          "employment_type": "internship",
+          "skills": [
+            "python"
+          ]
+        }
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-003",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "Why did you recommend the third job?",
+        "required_tools": [
+          "explain_job_match"
+        ],
+        "previous_position": 3
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-004",
+    "initial": {
+      "skills": [
+        "Python"
+      ]
+    },
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "What skills do I need for the first job?",
+        "required_tools": [
+          "analyze_skill_gap"
+        ],
+        "previous_position": 1
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-005",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "Details for the second job",
+        "required_tools": [
+          "get_job_details"
+        ],
+        "previous_position": 2
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-006",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "Save the first job",
+        "required_tools": [
+          "save_job"
+        ]
+      },
+      {
+        "message": "Show my saved jobs",
+        "required_tools": [
+          "get_saved_jobs"
+        ],
+        "has_jobs": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-007",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "Show previous searches",
+        "required_tools": [
+          "get_recent_searches"
+        ],
+        "contains": "internships"
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-008",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "Explain job 99",
+        "required_tools": [],
+        "contains": "Which job",
+        "no_tools": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-009",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "Only show remote and hybrid roles",
+        "required_tools": [],
+        "contains": "conflicting filters",
+        "no_tools": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-010",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Remember that I prefer Python roles",
+        "required_tools": [
+          "update_user_preferences"
+        ],
+        "preferences": {
+          "skills": [
+            "python"
+          ]
+        }
+      },
+      {
+        "message": "What are my preferences?",
+        "required_tools": [
+          "get_user_profile"
+        ],
+        "contains": "python",
+        "new_conversation": true
+      }
+    ],
+    "forbidden_tools": [],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-011",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Remember remote roles",
+        "required_tools": [
+          "update_user_preferences"
+        ],
+        "preferences": {
+          "remote_policy": "remote"
+        }
+      },
+      {
+        "message": "Find internships",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "new_conversation": true,
+        "filters": {
+          "remote_policy": "remote"
+        }
+      }
+    ],
+    "forbidden_tools": [],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-012",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Remember hybrid roles",
+        "required_tools": [
+          "update_user_preferences"
+        ],
+        "preferences": {
+          "remote_policy": "hybrid"
+        }
+      },
+      {
+        "message": "Find remote internships",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "new_conversation": true,
+        "filters": {
+          "remote_policy": "remote"
+        },
+        "preferences": {
+          "remote_policy": "hybrid"
+        }
+      }
+    ],
+    "forbidden_tools": [],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-013",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "Find jobs in Berlin",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": false
+      },
+      {
+        "message": "Show details for job 1",
+        "required_tools": [],
+        "contains": "Which job",
+        "no_tools": true
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-014",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "Show recent searches",
+        "required_tools": [
+          "get_recent_searches"
+        ],
+        "expected_status": "error",
+        "fail_tool": "get_recent_searches"
+      },
+      {
+        "message": "Show recent searches",
+        "required_tools": [
+          "get_recent_searches"
+        ]
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-015",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "Only jobs requiring Rust",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": false
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  },
+  {
+    "id": "agent-multiturn-016",
+    "initial": {},
+    "turns": [
+      {
+        "message": "Find remote internships requiring Python",
+        "required_tools": [
+          "search_jobs"
+        ],
+        "has_jobs": true
+      },
+      {
+        "message": "Find jobs",
+        "required_tools": [],
+        "unauthorized": true,
+        "new_conversation": false
+      }
+    ],
+    "forbidden_tools": [
+      "update_user_preferences"
+    ],
+    "success_criteria": "Required tools execute, forbidden tools never run, and expected state and evidence match."
+  }
+]
